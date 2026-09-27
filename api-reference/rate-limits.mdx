@@ -1,0 +1,94 @@
+---
+title: "API Rate Limits, Quotas, and Backoff Best Practices"
+sidebarTitle: "Rate Limits"
+description: "Understand the request rate limits applied to API calls, how to read rate limit headers, and what to do when you hit a 429 response."
+---
+
+Rate limiting protects the stability of the API for all users by preventing any single account from consuming a disproportionate share of resources. Limits are applied per API key, per rolling minute window, and per calendar day. If your integration exceeds either threshold, the API returns a `429 Too Many Requests` response until the window resets.
+
+## Limits by Plan
+
+Your rate limit is determined by your account's subscription plan. All limits apply per API key.
+
+| Plan | Requests per minute | Requests per day |
+|---|---|---|
+| **Free** | 60 | 1,000 |
+| **Starter** | 300 | 10,000 |
+| **Pro** | 1,000 | 100,000 |
+| **Enterprise** | Custom | Custom |
+
+<Note>
+  Daily limits reset at **00:00 UTC**. Per-minute limits use a rolling window, not a fixed clock-minute boundary. Enterprise plans can be configured with custom thresholds — contact your account manager.
+</Note>
+
+## Rate Limit Headers
+
+Every API response includes headers that tell you your current limit status. Read these headers to understand how much headroom you have before you need to back off:
+
+```
+X-RateLimit-Limit: 300
+X-RateLimit-Remaining: 247
+X-RateLimit-Reset: 1704067200
+```
+
+| Header | Description |
+|---|---|
+| `X-RateLimit-Limit` | The maximum number of requests allowed per minute for your plan. |
+| `X-RateLimit-Remaining` | The number of requests remaining in the current window. |
+| `X-RateLimit-Reset` | A Unix timestamp (UTC) indicating when the current window resets and `X-RateLimit-Remaining` returns to its maximum value. |
+
+Monitor `X-RateLimit-Remaining` in your client and slow down proactively when it approaches zero — this is more reliable than waiting for a `429`.
+
+## When You Exceed the Limit
+
+When you send more requests than your plan allows within the current window, the API stops processing the request and responds with an HTTP `429 Too Many Requests` status and the following JSON body:
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "RATE_LIMIT_EXCEEDED",
+    "message": "Too many requests. Please retry after 60 seconds.",
+    "retry_after": 60
+  }
+}
+```
+
+The `error.retry_after` value is the number of seconds to wait before sending your next request. Respect this value — sending requests before the window resets does not speed up recovery.
+
+<Warning>
+  Repeatedly sending requests after receiving a `429` can result in your API key being temporarily suspended. Implement proper backoff logic in your client from the start.
+</Warning>
+
+## Best Practices
+
+Follow these guidelines to stay within your limits and build a resilient integration:
+
+<Accordion title="Implement exponential backoff">
+  When you receive a `429`, wait before retrying. Use exponential backoff with jitter: start with a short delay (e.g. 1 second), double it on each subsequent failure, and add a small random offset to prevent multiple clients from thundering in at the same time. Always respect the `retry_after` value in the response — your initial wait should be at least that long.
+
+  ```js
+  async function requestWithBackoff(fn, maxRetries = 5) {
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      const response = await fn();
+      if (response.status !== 429) return response;
+      const retryAfter = parseInt(response.headers.get("retry-after") || "60", 10);
+      const jitter = Math.random() * 1000;
+      await new Promise(r => setTimeout(r, retryAfter * 1000 + jitter));
+    }
+    throw new Error("Max retries exceeded");
+  }
+  ```
+</Accordion>
+
+<Accordion title="Cache responses where possible">
+  If your integration reads the same resources repeatedly — for example, fetching the user list on every page load — consider caching the response locally for a short period (30–60 seconds is often sufficient). This dramatically reduces your request count without staling your data significantly.
+</Accordion>
+
+<Accordion title="Use bulk endpoints when available">
+  Rather than looping through a list of IDs and making one request per item, use bulk endpoints (such as `POST /data/bulk`) to process multiple records in a single API call. Bulk operations consume far fewer requests for the same amount of work. See the [Data API](/api-reference/data) reference for available bulk operations.
+</Accordion>
+
+<Accordion title="Request a limit increase">
+  If your legitimate use case consistently requires more capacity than your plan provides, contact support to discuss a limit increase. Include details about your integration's request patterns and the plan you're on. Enterprise customers can negotiate custom limits as part of their contract.
+</Accordion>

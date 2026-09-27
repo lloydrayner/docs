@@ -1,0 +1,80 @@
+---
+title: "Connect the App with Your Existing Favourite Tools"
+sidebarTitle: "Integrations"
+description: "Integrate the app with Slack, Google Workspace, Microsoft 365, Zapier, and more to automate workflows and keep your tools in sync."
+---
+
+The app's integrations marketplace lets you connect your existing tools so data flows automatically between the places your team already works. Rather than copying information between platforms or switching context constantly, you can wire up two-way syncs, pipe alerts into chat channels, and trigger actions across your entire toolchain — all from one central place.
+
+<Note>
+  Integration availability depends on your plan. The **Slack** and **Zapier** integrations are available on all paid plans. **Google Workspace** and **Microsoft 365** integrations require the **Business** plan or above. Visit your plan comparison page or contact your account owner to check what's included in your current subscription.
+</Note>
+
+## Popular Integrations
+
+<CardGroup cols={2}>
+  <Card title="Slack" icon="slack" href="/features/integrations">
+    Send real-time notifications to any Slack channel when records are created, updated, or assigned. Use slash commands to create and look up records without leaving Slack.
+  </Card>
+  <Card title="Google Workspace" icon="google" href="/features/integrations">
+    Sync your Google Calendar with due dates and scheduled events, and import files directly from Google Drive as attachments on any record.
+  </Card>
+  <Card title="Microsoft 365" icon="microsoft" href="/features/integrations">
+    Route notifications to Microsoft Teams channels and sync with Outlook calendar events. Attach OneDrive files to records without downloading and re-uploading.
+  </Card>
+  <Card title="Zapier" icon="bolt" href="/features/integrations">
+    Connect the app to 5,000+ other tools using Zapier's no-code automation builder. Trigger zaps from record events or use Zapier actions to create and update records automatically.
+  </Card>
+</CardGroup>
+
+## Connecting an Integration
+
+All integrations follow the same connection flow. The steps below walk you through the process for any integration in the marketplace.
+
+<Steps>
+  <Step title="Go to Settings → Integrations">
+    From any screen in the app, click your workspace name in the top-left corner, then select **Settings**. In the left-hand settings menu, click **Integrations** to open the integrations marketplace.
+  </Step>
+  <Step title="Find the integration and click Connect">
+    Browse or search the marketplace to find the tool you want to connect. Click the integration card to open its detail page, then click the **Connect** button.
+  </Step>
+  <Step title="Authorise access">
+    You will be redirected to the third-party service's authorisation screen. Sign in with the account you want to connect and grant the requested permissions. The permissions requested are the minimum required for the integration to function — the app never requests write access it doesn't need.
+  </Step>
+  <Step title="Configure settings">
+    After authorisation, you are returned to the app to finish setup. Configure the integration's options — for example, which Slack channel to post to, which Google Calendar to sync, or which Zapier trigger events to enable. Each integration's detail page documents its specific configuration options.
+  </Step>
+  <Step title="Test the connection">
+    Click **Send test** or **Test connection** to verify that the integration is working correctly. A confirmation message or a sample event (such as a test Slack message) confirms a successful setup. If the test fails, review the configuration settings and re-authorise if prompted.
+  </Step>
+</Steps>
+
+## Managing Connected Apps
+
+Once an integration is connected, you can view, edit, or disconnect it at any time from **Settings → Integrations → Connected**.
+
+The connected integrations list shows:
+- The name and icon of each connected service
+- The workspace member who authorised the connection
+- The date it was connected
+- Its current status (Active, Error, or Disconnected)
+
+**To edit an integration**, click its name in the list and update the configuration settings on the detail page. Changes save automatically.
+
+**To reconnect a broken integration**, click **Reconnect** next to any integration showing an Error status. This re-runs the authorisation flow. Integrations typically show errors when the authorising user changes their password or revokes app access from the third-party side.
+
+**To disconnect an integration**, click the integration name and then click **Disconnect** at the bottom of the detail page. Confirm the action in the dialogue that appears. Disconnecting stops all data flow immediately but does not delete any records already created by the integration.
+
+<Warning>
+  Disconnecting an integration that powers active automation rules will cause those rules to fail. Review your **Automations** settings before disconnecting an integration to identify any rules that depend on it.
+</Warning>
+
+## Webhooks
+
+If you need a custom integration that isn't available in the marketplace, you can use outbound webhooks to send real-time event data from the app to any URL that accepts HTTP POST requests.
+
+Webhooks fire on the following event types: record created, record updated, record deleted, status changed, comment added, and member assigned.
+
+To set up a webhook, go to **Settings → Integrations → Webhooks** and click **Add webhook**. Paste your endpoint URL, select the event types you want to subscribe to, and click **Save**. The app sends a verification request to the URL immediately — your endpoint must return a `200` response within 5 seconds to activate the webhook.
+
+For full payload schemas and signature verification details, see the [Webhooks API reference](/api-reference/webhooks).

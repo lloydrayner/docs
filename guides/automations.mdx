@@ -1,0 +1,115 @@
+---
+title: "Automate Tasks Using Trigger, Condition, and Action Rules"
+sidebarTitle: "Automations"
+description: "Create automation rules to trigger actions based on events — send notifications, update records, assign tasks, and more without manual effort."
+---
+
+Every team has tasks that follow the same pattern every time: when a record is created, send a notification; when a due date passes, remind the assignee; when a status changes, update a field. These tasks are valuable — the work wouldn't get done without them — but they don't need a human to do them. Automations let you encode those patterns once so the app handles them automatically, every time, without anyone having to remember.
+
+## How Automations Work
+
+Every automation follows the same three-part model:
+
+1. **Trigger** — the event that starts the automation (e.g., a record is created, a field value changes, a date is reached)
+2. **Conditions** *(optional)* — filters that must be true for the automation to proceed (e.g., only when the Status field equals "Ready for Review")
+3. **Action** — what the app does when the trigger fires and conditions are met (e.g., send an email, update a field, assign a user)
+
+This structure keeps automations composable and predictable. You can create simple single-action rules in minutes, or chain conditions and actions together for more sophisticated workflows.
+
+## Creating an Automation
+
+<Steps>
+  <Step title="Go to Settings → Automations">
+    Navigate to **Settings → Automations** in the sidebar. You need Admin or Owner permissions to create or edit automations. The Automations page lists all existing rules along with their enabled/disabled status and last-run time.
+  </Step>
+  <Step title="Click New Automation">
+    Click **+ New Automation** in the top-right corner. This opens the automation builder, a visual editor where you'll define each part of your rule.
+  </Step>
+  <Step title="Choose a Trigger">
+    Select the event that starts this automation. Available triggers include:
+
+    - **Record created** — fires when a new record is added
+    - **Field changed** — fires when a specific field's value changes
+    - **Status changed** — fires when the Status field moves to a particular value
+    - **Date reached** — fires on or after a date stored in a date field (e.g., due date, renewal date)
+    - **Record deleted** — fires when a record is removed
+    - **Form submitted** — fires when an intake form is completed
+  </Step>
+  <Step title="Add Conditions (Optional)">
+    Conditions narrow down when the automation fires. For example, you might trigger on "field changed" but only want the automation to run when the Assignee field changes *and* the Priority field is set to "High". 
+
+    Click **+ Add Condition** and use the filter builder to define your criteria. All conditions must be true for the automation to proceed. Leave this step empty if you want the automation to fire on every instance of the trigger.
+  </Step>
+  <Step title="Define the Action">
+    Choose what the automation does when it fires. Available actions include:
+
+    - **Send email** — deliver a customizable email to a static address, the record's assignee, or a dynamic field value
+    - **Update field** — set or clear the value of any field on the triggering record
+    - **Assign user** — set the Assignee field to a specific team member or a value from another field
+    - **Create record** — add a new record in the same or a different workspace
+    - **Send in-app notification** — alert specific team members inside the app
+    - **Send webhook** — POST a JSON payload to an external URL for integrations with third-party services
+
+    You can add multiple actions to a single automation. Actions run in the order you define them.
+  </Step>
+  <Step title="Name and Enable the Automation">
+    Give your automation a descriptive name that explains what it does (e.g., "Notify team on status → In Review"). Clear names make the automations list much easier to manage as your rule count grows. Toggle the automation to **Enabled** and click **Save**. The rule is now active and will fire the next time its trigger conditions are met.
+  </Step>
+</Steps>
+
+## Common Automation Examples
+
+<CardGroup cols={2}>
+  <Card title="Welcome New Users" icon="hand-wave">
+    **Trigger:** Record created in the Users workspace  
+    **Action:** Send a welcome email to the email field on the new record  
+
+    Greet every new user automatically with onboarding instructions, links to key resources, or a personal note from your team.
+  </Card>
+  <Card title="Overdue Task Alerts" icon="clock">
+    **Trigger:** Date reached (Due Date field)  
+    **Condition:** Status is not "Completed"  
+    **Action:** Send in-app notification to the Assignee  
+
+    Remind assignees the moment a task goes overdue so nothing slips through the cracks.
+  </Card>
+  <Card title="Status Change Notifications" icon="bell">
+    **Trigger:** Status changed to "Ready for Review"  
+    **Action:** Send email to the record's owner  
+
+    Keep stakeholders informed the instant work moves into their court, without requiring the submitter to send a manual nudge.
+  </Card>
+  <Card title="Auto-Assign by Category" icon="user-check">
+    **Trigger:** Record created  
+    **Condition:** Category field equals "Support"  
+    **Action:** Assign user → Support Team Lead  
+
+    Route new records to the right person automatically based on how they're categorized, eliminating the need for a manual triage step.
+  </Card>
+</CardGroup>
+
+## Managing Automations
+
+The **Settings → Automations** page is your control centre for all rules in your account.
+
+- **Enable or disable** a rule instantly using the toggle next to its name — the rule is preserved but won't fire while disabled. Use this to pause an automation during data migrations or testing without deleting it.
+- **Edit** any rule by clicking its name to reopen the automation builder. Changes take effect immediately after saving.
+- **Delete** a rule permanently by clicking the ⋯ menu and selecting **Delete**. Deletion cannot be undone, so disable the rule first if you're unsure.
+- **View run history** by clicking the **History** tab on any automation. The log shows every time the rule fired, whether it succeeded, and a summary of what changed. Use this to verify your automations are working as expected and to diagnose unexpected behavior.
+
+## Automation Limits by Plan
+
+The number of active automations you can create depends on your subscription plan:
+
+| Plan | Active Automations |
+|------|-------------------|
+| Free | 5 |
+| Starter | 25 |
+| Pro | Unlimited |
+| Enterprise | Unlimited |
+
+Disabled automations do not count against your limit. To upgrade your plan and increase your automation limit, go to **Settings → Billing**.
+
+<Warning>
+  **Avoid automation loops.** If one automation updates a field and a second automation triggers on that same field change, you can create an infinite loop where each automation continually triggers the other. The app detects and breaks loops after a few cycles, but this can cause unexpected behavior and consume your run quota rapidly. Always check whether a new automation's action could trigger an existing rule before saving it.
+</Warning>

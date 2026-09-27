@@ -1,0 +1,94 @@
+---
+title: "Notification Settings: Email, In-App, and Push Alerts"
+sidebarTitle: "Notifications"
+description: "Configure email, in-app, and mobile push notifications to stay informed about activity, mentions, deadlines, and updates in your workspace."
+---
+
+The app's notification system keeps you informed about the activity that matters to you — without the noise you don't need. You can receive alerts through email, the in-app notification centre, and mobile push, and you can tune every channel independently so each one works the way your day does.
+
+## Notification Types
+
+<Tabs>
+  <Tab title="Email Notifications">
+    Email notifications are delivered to the address associated with your account. You can choose how frequently you receive them:
+
+    - **Instant** — an email is sent as soon as the triggering event occurs. Best for high-priority activity you need to act on quickly.
+    - **Daily digest** — a single summary email is delivered each morning covering all activity from the previous 24 hours. Ideal if you prefer a structured review at the start of your day.
+    - **Weekly summary** — a consolidated roundup delivered on Monday morning covering the past week. Useful for stakeholders who need awareness without frequent interruptions.
+
+    To change your email frequency, go to **Settings → Notifications → Email** and select your preferred option from the **Delivery frequency** dropdown. You can also choose a different email address for notifications if it differs from your login address.
+  </Tab>
+  <Tab title="In-App Notifications">
+    In-app notifications appear in the notification bell (🔔) in the top-right corner of the app. The bell shows a badge count for unread items.
+
+    **Reading notifications:**
+    Click the bell to open the notification panel. Each notification shows the triggering event, the related record, and a timestamp. Click any notification to jump directly to the relevant record.
+
+    **Marking as read:**
+    - Click the checkmark on an individual notification to mark it as read.
+    - Click **Mark all as read** at the top of the panel to clear the badge in one action.
+
+    **Clearing notifications:**
+    Notifications older than 90 days are automatically removed from the panel. To clear them manually, click **⋯ → Clear all** at the top of the notification panel. Cleared notifications cannot be recovered, but the underlying records and activity history remain intact.
+  </Tab>
+  <Tab title="Mobile Push">
+    Push notifications deliver real-time alerts to your iOS or Android device even when the app is not open in the foreground.
+
+    **Enabling push notifications:**
+    1. Open the mobile app and go to **Profile → Settings → Notifications**.
+    2. Toggle **Push notifications** on.
+    3. When prompted by your device, grant the app permission to send notifications.
+
+    **Managing devices:**
+    Each device you sign in to is registered separately. To see or remove registered devices, go to **Settings → Notifications → Push** on the web app. Any device you remove will stop receiving push notifications immediately. Re-enabling push on that device will re-register it.
+
+    Push notifications respect your Do Not Disturb schedule — no alerts are sent during your configured quiet hours, even for high-priority events.
+  </Tab>
+</Tabs>
+
+## Notification Preferences
+
+Your notification preferences let you decide exactly which events trigger alerts and through which channels.
+
+To access your preferences, go to **Settings → Notifications**. The preference table lists every notification type — grouped by category such as *Assignments*, *Comments*, *Deadlines*, and *System* — with a toggle for each delivery channel (email, in-app, push).
+
+Common preferences you can toggle include:
+
+- A record is assigned to you or unassigned from you
+- Someone comments on a record you own or follow
+- A due date is approaching (configurable lead time: 1, 2, 3, or 7 days before)
+- A record's status changes
+- Someone @mentions you in a comment or description
+- A workspace member joins or leaves
+
+Changes take effect immediately — there is no save button required.
+
+## Do Not Disturb
+
+Do Not Disturb (DND) pauses all notifications during the hours you specify, across every channel.
+
+To configure quiet hours:
+
+1. Go to **Settings → Notifications → Do Not Disturb**.
+2. Toggle **Enable quiet hours** on.
+3. Set your **Start time** and **End time** using the time pickers.
+4. Select the days of the week DND should apply (for example, disable it on weekdays only).
+5. Choose your timezone — this defaults to your device's local timezone.
+
+While DND is active, in-app notifications are still recorded but not surfaced as a badge. Email and push notifications are queued and delivered in a single batch when your quiet hours end.
+
+You can also mute notifications for a specific record or project without changing your global settings. Open the record or section, click **⋯ More**, and select **Mute notifications**. Choose a duration — 1 hour, 8 hours, 24 hours, or indefinitely — and confirm.
+
+<Tip>
+  If a particular project generates a lot of activity that isn't directly relevant to you, mute it at the project level rather than lowering your global notification sensitivity. That way you still get alerted on the things you care about elsewhere in your workspace.
+</Tip>
+
+## @Mentions and Assignments
+
+Two types of notification always receive elevated priority and ignore batch digest settings by default: **@mentions** and **assignments**.
+
+**@Mentions:** When a teammate types `@yourname` in a comment, description, or update, you receive an immediate notification regardless of your digest frequency setting. The notification links directly to the comment so you can respond in context.
+
+**Assignments:** When a record is assigned to you — either by a teammate or by an automation rule — you are notified instantly. If a record is reassigned away from you, you also receive a notification so you know it's no longer in your queue.
+
+You can adjust the delivery channel for both of these event types in **Settings → Notifications**, but their delivery frequency is always set to **Instant** and cannot be changed to digest mode. This ensures you never miss a direct request or a task landed in your queue.

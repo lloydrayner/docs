@@ -1,0 +1,122 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "maple",
+  "name": "Help Centre",
+  "colors": {
+    "primary": "#E89859",
+    "light": "#E89859",
+    "dark": "#2C4248"
+  },
+  "favicon": {
+    "light": "/images/soda_symbol_dark.svg",
+    "dark": "/images/soda_symbol_light.svg"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Help Centre",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "getting-started/creating-your-account",
+              "getting-started/navigating-the-dashboard"
+            ]
+          },
+          {
+            "group": "Account & Billing",
+            "pages": [
+              "account/profile-and-settings",
+              "account/team-and-members",
+              "account/billing-and-plans",
+              "account/security"
+            ]
+          },
+          {
+            "group": "Core Features",
+            "pages": [
+              "features/overview",
+              "features/managing-your-data",
+              "features/notifications",
+              "features/integrations"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/best-practices",
+              "guides/importing-and-exporting",
+              "guides/collaboration",
+              "guides/automations"
+            ]
+          },
+          {
+            "group": "Troubleshooting",
+            "pages": [
+              "troubleshooting/common-issues",
+              "troubleshooting/account-access",
+              "troubleshooting/billing-issues",
+              "troubleshooting/contact-support"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api-reference/introduction",
+              "api-reference/authentication",
+              "api-reference/rate-limits"
+            ]
+          },
+          {
+            "group": "Endpoints",
+            "pages": [
+              "api-reference/users",
+              "api-reference/data",
+              "api-reference/webhooks"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "navbar": {
+    "links": [
+      { "label": "Support", "href": "mailto:support@example.com" }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Go to App",
+      "href": "https://app.example.com"
+    }
+  },
+  "footer": {
+    "socials": {}
+  },
+  "logo": {
+    "light": "/images/soda_logo_darkgray.svg",
+    "dark": "/images/soda_logo_white.svg",
+    "href": "https://getsoda.app/"
+  },
+  "fonts": {
+    "heading": {
+      "family": "Halant",
+      "weight": 400
+    },
+    "body": {
+      "family": "Geist",
+      "weight": 400
+    }
+  },
+  "background": {
+    "color": {
+      "light": "#FCFCFC"
+    }
+  }
+}

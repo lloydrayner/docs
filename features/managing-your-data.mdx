@@ -1,0 +1,100 @@
+---
+title: "Data Management: Create, Filter, and Search Records"
+sidebarTitle: "Managing Data"
+description: "Create records, organise with tags and filters, run bulk actions, and search your data to keep your workspace structured and efficient."
+---
+
+The app's data management system gives you a flexible, structured workspace for every piece of information your team works with. Whether you're tracking projects, customers, tasks, or any other kind of record, you can create, organise, filter, and act on your data without juggling spreadsheets or switching between tools.
+
+## Creating Records
+
+To add a new record to your workspace, follow these steps:
+
+<Steps>
+  <Step title="Open the relevant section">
+    Navigate to the section or view where you want to add the record. You can create records from any list, board, or table view.
+  </Step>
+  <Step title="Click New">
+    Select the **+ New** button in the top-right corner of the view. A blank record form opens in a side panel or modal, depending on your layout preference.
+  </Step>
+  <Step title="Fill in the fields">
+    Complete the required fields — typically a title and at least one status or category. Optional fields such as assignee, due date, and description can be filled in now or edited later.
+  </Step>
+  <Step title="Save the record">
+    Click **Save** to create the record, or press **⌘ Enter** (Mac) / **Ctrl Enter** (Windows) to save with the keyboard shortcut. The record appears immediately in the current view.
+  </Step>
+</Steps>
+
+<Tip>
+  Use the keyboard shortcut **N** from any list or table view to open a new record form instantly — no need to reach for the mouse. Check **Settings → Keyboard Shortcuts** for the full reference.
+</Tip>
+
+## Organizing with Tags and Categories
+
+Tags and categories let you group related records across different views and sections.
+
+- **Tags** are free-form labels you create on the fly. Add as many as you like to a record by clicking the **Tags** field and typing a new or existing tag name.
+- **Categories** are structured groupings defined by your workspace admin. They appear as a dropdown field and are useful for classification schemes that should stay consistent across the team.
+
+To manage your available tags, go to **Settings → Data → Tags**. From there you can rename, merge, or delete tags. Merging two tags updates every record that uses either label automatically.
+
+## Filtering and Sorting
+
+Filters let you narrow any view down to exactly the records you care about.
+
+To apply a filter, click the **Filter** button in the view toolbar and choose a field to filter by. The most commonly used filter conditions are:
+
+| Field | Available conditions |
+|---|---|
+| Date | is, is before, is after, is within range |
+| Status | is, is not, is any of |
+| Tag | includes, does not include |
+| Assignee | is me, is, is not, is empty |
+
+You can stack multiple filters — all conditions are joined with **AND** logic by default. Switch to **OR** mode using the toggle at the top of the filter panel.
+
+To sort records, click **Sort** in the toolbar, pick a field, and choose ascending or descending order. You can add secondary and tertiary sort levels to break ties.
+
+## Bulk Actions
+
+When you need to update, move, or remove multiple records at once, use bulk actions to save time.
+
+1. Check the checkbox on the left side of each record you want to select — or check the header checkbox to select all records in the current view.
+2. A bulk action toolbar appears at the bottom of the screen showing the number of selected records.
+3. Choose an action:
+   - **Edit fields** — update a shared field value across all selected records simultaneously.
+   - **Assign** — reassign all selected records to a different team member.
+   - **Move** — relocate records to another section or workspace area.
+   - **Export** — download the selected records as a CSV file.
+   - **Archive** — move records out of active views while keeping them recoverable.
+   - **Delete** — permanently remove records after the 30-day recovery window expires.
+
+## Search
+
+The app provides both quick search and advanced filtered search to help you find records fast.
+
+**Global search** is available from any screen. Press **⌘ K** (Mac) / **Ctrl K** (Windows) to open the command palette, then start typing. Results appear instantly across all sections you have access to.
+
+**View-level search** filters records within the current view only. Click the magnifying-glass icon in the view toolbar and type a keyword. The view updates in real time as you type.
+
+**Saved searches** let you store a combination of filters and search terms as a named view you can return to at any time. After setting up your filters, click **Save view** in the toolbar, give it a name, and it will appear in your sidebar under **Saved Views**.
+
+## Archiving and Deleting
+
+The app distinguishes between archiving and deleting so you always have control over your data.
+
+<Accordion title="Archiving a record">
+  Archiving removes a record from your active views without permanently deleting it. Archived records are stored in the **Archive** section (accessible from the left sidebar) and can be restored at any time. Use archiving for completed work or records you no longer need day-to-day but may need to reference later.
+
+  To archive, open a record and click **⋯ More → Archive**, or select multiple records and use the bulk action toolbar.
+</Accordion>
+
+<Accordion title="Deleting a record">
+  Deleting moves a record to the **Trash**. Records in the Trash are permanently removed after a **30-day recovery window**. During that window, you can restore any deleted record by going to **Settings → Trash**, finding the record, and clicking **Restore**.
+
+  To delete, open a record and click **⋯ More → Delete**, or use the bulk action toolbar. Deletion requires confirmation to prevent accidental data loss.
+</Accordion>
+
+<Warning>
+  After the 30-day recovery window closes, deleted records are permanently and irreversibly removed — including all attached files, comments, and history. If you're unsure whether you'll need a record again, archive it instead of deleting it.
+</Warning>

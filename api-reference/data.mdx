@@ -1,0 +1,337 @@
+---
+title: "Data API: Create, Read, Update, and Delete Records"
+sidebarTitle: "Data"
+description: "Full CRUD endpoints for managing data records. List, filter, create, update, delete, and bulk-process records programmatically via the REST API."
+---
+
+The Data API is the core of the app's REST interface, giving you full create, read, update, and delete access to all records in your account. Use it to sync records with external systems, automate record creation from other tools, bulk-process large datasets, or build custom views on top of your data.
+
+<Note>
+  The examples below use `sk_live_abc123` as a placeholder API key. Replace it with your own key from **Settings → API Keys**. See [Authentication](/api-reference/authentication) for details.
+</Note>
+
+---
+
+## List Records
+
+Retrieve a paginated, filterable list of records in your account.
+
+```
+GET /data
+```
+
+### Query Parameters
+
+<ParamField query="page" type="integer" default="1">
+  The page number to return.
+</ParamField>
+
+<ParamField query="per_page" type="integer" default="20">
+  Number of results per page. Maximum `100`.
+</ParamField>
+
+<ParamField query="filter[status]" type="string">
+  Return only records with this status. Accepted values: `active`, `archived`.
+</ParamField>
+
+<ParamField query="filter[tag]" type="string">
+  Return only records that include this tag. Provide a single tag string; to filter by multiple tags, repeat the parameter.
+</ParamField>
+
+<ParamField query="sort" type="string" default="created_at">
+  Field to sort results by. Accepted values: `created_at`, `updated_at`, `due_date`, `title`.
+</ParamField>
+
+<ParamField query="order" type="string" default="desc">
+  Sort direction. Accepted values: `asc`, `desc`.
+</ParamField>
+
+### Example Request
+
+```bash
+curl -X GET "https://api.example.com/v1/data?filter[status]=active&filter[tag]=urgent&sort=due_date&order=asc&per_page=50" \
+  -H "Authorization: Bearer sk_live_abc123" \
+  -H "Content-Type: application/json"
+```
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "rec_01ABCD",
+      "title": "Q2 Campaign Brief",
+      "status": "active",
+      "tags": ["urgent", "marketing"],
+      "assigned_to": "usr_01HXYZ",
+      "due_date": "2024-06-30T00:00:00Z",
+      "created_at": "2024-05-01T09:00:00Z",
+      "updated_at": "2024-05-20T14:30:00Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "per_page": 50,
+    "total": 12
+  }
+}
+```
+
+---
+
+## Get a Record
+
+Retrieve a single record by its ID.
+
+```
+GET /data/{id}
+```
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique ID of the record to retrieve. Example: `rec_01ABCD`.
+</ParamField>
+
+### Example Request
+
+```bash
+curl -X GET https://api.example.com/v1/data/rec_01ABCD \
+  -H "Authorization: Bearer sk_live_abc123" \
+  -H "Content-Type: application/json"
+```
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "rec_01ABCD",
+    "title": "Q2 Campaign Brief",
+    "status": "active",
+    "tags": ["urgent", "marketing"],
+    "assigned_to": "usr_01HXYZ",
+    "due_date": "2024-06-30T00:00:00Z",
+    "created_at": "2024-05-01T09:00:00Z",
+    "updated_at": "2024-05-20T14:30:00Z"
+  }
+}
+```
+
+---
+
+## Create a Record
+
+Create a new record in your account.
+
+```
+POST /data
+```
+
+### Body Parameters
+
+<ParamField body="title" type="string" required>
+  The title of the record. Must be between 1 and 255 characters.
+</ParamField>
+
+<ParamField body="status" type="string" default="active">
+  The initial status of the record. Accepted values: `active`, `archived`.
+</ParamField>
+
+<ParamField body="tags" type="array">
+  An array of tag strings to attach to the record. Tags are created automatically if they don't exist.
+</ParamField>
+
+<ParamField body="assigned_to" type="string">
+  The `id` of the user to assign the record to. Must be a valid user ID in your account.
+</ParamField>
+
+<ParamField body="due_date" type="string">
+  An ISO 8601 datetime string representing the record's due date. Example: `2024-12-31T23:59:59Z`.
+</ParamField>
+
+### Example Request
+
+```bash
+curl -X POST https://api.example.com/v1/data \
+  -H "Authorization: Bearer sk_live_abc123" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Onboarding Checklist",
+    "status": "active",
+    "tags": ["onboarding", "internal"],
+    "assigned_to": "usr_01HXYZ",
+    "due_date": "2024-07-15T17:00:00Z"
+  }'
+```
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "rec_02EFGH",
+    "title": "Onboarding Checklist",
+    "status": "active",
+    "tags": ["onboarding", "internal"],
+    "assigned_to": "usr_01HXYZ",
+    "due_date": "2024-07-15T17:00:00Z",
+    "created_at": "2024-06-01T10:00:00Z",
+    "updated_at": "2024-06-01T10:00:00Z"
+  }
+}
+```
+
+---
+
+## Update a Record
+
+Update one or more fields on an existing record. Only fields present in the request body are modified — omitting a field leaves its current value unchanged.
+
+```
+PUT /data/{id}
+```
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique ID of the record to update.
+</ParamField>
+
+### Body Parameters
+
+<ParamField body="title" type="string">
+  A new title for the record.
+</ParamField>
+
+<ParamField body="status" type="string">
+  A new status for the record. Accepted values: `active`, `archived`.
+</ParamField>
+
+<ParamField body="tags" type="array">
+  Replaces the entire tag list with the provided array. To remove all tags, pass an empty array `[]`.
+</ParamField>
+
+<ParamField body="assigned_to" type="string">
+  The `id` of the user to reassign the record to.
+</ParamField>
+
+<ParamField body="due_date" type="string">
+  A new ISO 8601 due date. Pass `null` to clear an existing due date.
+</ParamField>
+
+### Example Request
+
+```bash
+curl -X PUT https://api.example.com/v1/data/rec_02EFGH \
+  -H "Authorization: Bearer sk_live_abc123" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "archived",
+    "tags": ["onboarding", "complete"]
+  }'
+```
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "rec_02EFGH",
+    "title": "Onboarding Checklist",
+    "status": "archived",
+    "tags": ["onboarding", "complete"],
+    "assigned_to": "usr_01HXYZ",
+    "due_date": "2024-07-15T17:00:00Z",
+    "created_at": "2024-06-01T10:00:00Z",
+    "updated_at": "2024-06-15T08:45:00Z"
+  }
+}
+```
+
+---
+
+## Delete a Record
+
+Move a record to the trash. Deleted records are recoverable for **30 days** before they are permanently purged.
+
+```
+DELETE /data/{id}
+```
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique ID of the record to delete.
+</ParamField>
+
+### Example Request
+
+```bash
+curl -X DELETE https://api.example.com/v1/data/rec_02EFGH \
+  -H "Authorization: Bearer sk_live_abc123"
+```
+
+A successful deletion returns `204 No Content` with no response body.
+
+<Note>
+  Deleted records move to the trash and remain recoverable for 30 days. To permanently and immediately delete a record without the recovery window, call `DELETE /data/{id}?permanent=true`. Permanent deletion cannot be undone.
+</Note>
+
+---
+
+## Bulk Operations
+
+Apply an action to multiple records in a single request. Bulk operations are more efficient than looping over individual endpoints and consume far fewer API calls against your rate limit.
+
+```
+POST /data/bulk
+```
+
+### Body Parameters
+
+<ParamField body="action" type="string" required>
+  The action to apply to all specified records. Accepted values: `delete`, `update`, `archive`.
+</ParamField>
+
+<ParamField body="ids" type="array" required>
+  An array of record ID strings to apply the action to. Maximum 500 IDs per request.
+</ParamField>
+
+<ParamField body="data" type="object">
+  For the `update` action, provide a partial record object with the fields to update. This object is applied to every record in the `ids` array. Required when `action` is `update`; ignored for `delete` and `archive`.
+</ParamField>
+
+### Example Request
+
+```bash
+curl -X POST https://api.example.com/v1/data/bulk \
+  -H "Authorization: Bearer sk_live_abc123" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "action": "update",
+    "ids": ["rec_01ABCD", "rec_02EFGH", "rec_03IJKL"],
+    "data": {
+      "status": "archived",
+      "tags": ["processed"]
+    }
+  }'
+```
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "affected": 3
+  }
+}
+```
+
+The `affected` count tells you how many records were successfully updated. If some IDs in the request were not found or could not be modified, the response includes an `errors` array with details for each failed ID.

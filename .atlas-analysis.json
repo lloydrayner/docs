@@ -1,0 +1,105 @@
+{
+  "projectType": "saas",
+  "projectName": "SaaS Help Centre",
+  "projectDescription": "A comprehensive help centre for a SaaS application, covering everything users need to get started, manage their account, and get the most out of the product.",
+  "theme": "almond",
+  "primaryColor": "#ef7025",
+  "lightColor": "#eec9bc",
+  "darkColor": "#4fa1ab",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Help Centre",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "getting-started/creating-your-account",
+              "getting-started/navigating-the-dashboard"
+            ]
+          },
+          {
+            "group": "Account & Billing",
+            "pages": [
+              "account/profile-and-settings",
+              "account/team-and-members",
+              "account/billing-and-plans",
+              "account/security"
+            ]
+          },
+          {
+            "group": "Core Features",
+            "pages": [
+              "features/overview",
+              "features/managing-your-data",
+              "features/notifications",
+              "features/integrations"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/best-practices",
+              "guides/importing-and-exporting",
+              "guides/collaboration",
+              "guides/automations"
+            ]
+          },
+          {
+            "group": "Troubleshooting",
+            "pages": [
+              "troubleshooting/common-issues",
+              "troubleshooting/account-access",
+              "troubleshooting/billing-issues",
+              "troubleshooting/contact-support"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api-reference/introduction",
+              "api-reference/authentication",
+              "api-reference/rate-limits"
+            ]
+          },
+          {
+            "group": "Endpoints",
+            "pages": [
+              "api-reference/users",
+              "api-reference/data",
+              "api-reference/webhooks"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "User account management and team collaboration",
+    "Dashboard and data management",
+    "Billing and subscription management",
+    "Integrations with third-party tools",
+    "Notifications and alerts",
+    "Automations and workflows",
+    "Import and export capabilities",
+    "REST API and webhooks"
+  ],
+  "publicApiSurface": [
+    "GET /users",
+    "POST /users",
+    "GET /data",
+    "POST /data",
+    "PUT /data/{id}",
+    "DELETE /data/{id}",
+    "GET /webhooks",
+    "POST /webhooks",
+    "DELETE /webhooks/{id}"
+  ]
+}

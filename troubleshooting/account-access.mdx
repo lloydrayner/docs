@@ -1,0 +1,130 @@
+---
+title: "Fix Account Access, Login, and Two-Factor Auth Issues"
+sidebarTitle: "Account Access"
+description: "Resolve login failures, forgotten passwords, locked accounts, SSO errors, and two-factor authentication issues to regain access to your account."
+---
+
+Losing access to your account is frustrating, but most login and authentication issues can be resolved in a few minutes without contacting support. The sections below cover every common access scenario, from forgotten passwords to SSO misconfigurations and two-factor authentication failures.
+
+<Warning>
+  Never share your password with anyone — including support staff. Our team will never ask for your password. If you receive a request for your password from someone claiming to represent us, treat it as a phishing attempt and report it to support immediately.
+</Warning>
+
+## Access & Login Issues
+
+<Accordion title="I forgot my password">
+  You can reset your password at any time from the login page without needing access to your current password.
+
+  1. Go to the login page and click **Forgot password?** below the password field.
+  2. Enter the email address associated with your account and click **Send reset link**.
+  3. Check your inbox for an email with the subject **"Reset your password"**. Check your spam folder if it doesn't arrive within two minutes.
+  4. Click the link in the email. The link is valid for **60 minutes** — request a new one if it expires.
+  5. Enter and confirm your new password. Your password must be at least 8 characters and include a mix of letters and numbers.
+  6. Click **Save new password**. You are automatically signed in and redirected to your dashboard.
+
+  <Tip>
+    Use a password manager to generate and store a strong, unique password so you don't need to reset it again in the future.
+  </Tip>
+</Accordion>
+
+<Accordion title="My account is locked">
+  Your account is automatically locked after **5 consecutive failed login attempts** to protect you against unauthorised access.
+
+  **Wait for the automatic unlock:**
+  - Locked accounts are automatically unlocked after **15 minutes**. Wait and then try signing in again with the correct credentials.
+
+  **Reset your password instead:**
+  - If you're unsure of your password, click **Forgot password?** on the login page to reset it. Successfully resetting your password also unlocks your account immediately.
+
+  **Contact support:**
+  - If your account is still locked after 15 minutes and a password reset hasn't resolved it, contact support. Provide your account email address so the team can manually unlock your account.
+
+  <Note>
+    Account lockouts are a security feature designed to block brute-force attacks. If you received a lockout notification but didn't attempt to log in, someone else may be trying to access your account — change your password immediately once you regain access.
+  </Note>
+</Accordion>
+
+<Accordion title="I can't log in with Google / SSO">
+  Single Sign-On (SSO) login failures are usually caused by a configuration issue on your organisation's identity provider or a mismatch between your SSO email and your account email.
+
+  **Check your SSO configuration:**
+  1. Contact your **organisation admin** and ask them to verify the SSO configuration in **Settings → Security → Single Sign-On**.
+  2. Confirm that your email address is provisioned in your company's identity provider (Google Workspace, Okta, Azure AD, etc.).
+  3. Make sure you're using the correct organisation login URL if your company uses a custom SSO entry point.
+
+  **Common SSO error messages:**
+  - **"Email domain not authorised"** — your email domain hasn't been added to the SSO configuration. Ask your admin to add it.
+  - **"Account not found"** — your SSO identity doesn't match any existing account. You may need to be invited by your admin first.
+  - **"SSO is required for your organisation"** — your organisation has enforced SSO login. You cannot use a password to log in; contact your admin for access.
+
+  **Try email/password login:**
+  - If SSO is optional for your organisation, try logging in with your email and password as a fallback. Go to the login page and click **Sign in with email** if an SSO button is shown by default.
+
+  If the problem persists after these steps, contact your organisation admin or reach out to our support team with the exact error message you're seeing.
+</Accordion>
+
+<Accordion title="2FA isn't working">
+  Two-factor authentication (2FA) issues are almost always caused by a time sync problem on your authenticator app, or by needing to use a recovery code.
+
+  **Fix a time sync issue:**
+  1. Open your authenticator app (Google Authenticator, Authy, 1Password, etc.).
+  2. TOTP codes are time-based — if your device clock is even slightly out of sync, codes will be rejected.
+  3. On Android: go to **Google Authenticator → Settings → Time correction for codes → Sync now**.
+  4. On iOS: go to **Settings → General → Date & Time** and enable **Set automatically**.
+  5. Try the new code immediately after syncing.
+
+  **Use a recovery code:**
+  1. On the 2FA prompt, click **Use a recovery code** or **Try another method**.
+  2. Enter one of the 8-character recovery codes you saved when you first enabled 2FA.
+  3. Each recovery code can only be used once. After signing in, go to **Settings → Security → Two-Factor Authentication** and generate a new set of recovery codes.
+
+  **Lost access to your authenticator and recovery codes:**
+  - Contact support with proof of account ownership (your account email, recent billing history, or an email sent from your registered address). The support team will verify your identity and disable 2FA on your account so you can regain access.
+</Accordion>
+
+<Accordion title="I didn't receive the password reset email">
+  If the password reset email hasn't arrived within a few minutes, try the following before requesting another one.
+
+  1. **Check your spam and junk folders.** Email filters frequently misclassify automated emails. Search for the subject line "Reset your password" across all folders.
+  2. **Check the correct inbox.** Make sure you're checking the inbox for the email address you used to sign up. If you're unsure which address that is, try each one you might have used.
+  3. **Wait a few minutes.** Email delivery can occasionally be delayed by a few minutes due to mail server queues. Wait up to 5 minutes before requesting a new link.
+  4. **Request a new link.** Go back to the **Forgot password?** page and submit your email again. New links are sent immediately.
+  5. **Add the sender to your safe list.** Add our no-reply address (shown in the email footer) to your contacts or email safe-sender list to prevent filtering in the future.
+  6. **Contact support.** If you still haven't received an email after two attempts and checking all folders, contact support. Provide your account email and we can investigate delivery.
+</Accordion>
+
+<Accordion title="My account was deactivated">
+  Account deactivation is different from being locked out. A deactivated account has been intentionally disabled, usually by a workspace or organisation admin.
+
+  **If you're a member of an organisation workspace:**
+  - Contact your **organisation admin** — they have the ability to reactivate your account from the admin panel under **Settings → Members**.
+  - If you don't know who your admin is, contact support with your account email and we can identify the right person to reach.
+
+  **If you're the account owner:**
+  - Your account may have been deactivated due to a failed payment, a violation of our Terms of Service, or an explicit deactivation request.
+  - Contact support directly with your account email address. Include any context you have, such as recent error messages or notifications you received before losing access.
+
+  <Note>
+    Deactivated accounts and their data are retained for **90 days** before permanent deletion. Contact support promptly if you need to recover your account or export your data.
+  </Note>
+</Accordion>
+
+<Accordion title="I'm being redirected to a login loop">
+  A login loop — where you enter your credentials, appear to log in, and are immediately redirected back to the login page — is almost always caused by corrupted session cookies.
+
+  1. **Clear cookies and site data for the app.** In your browser settings, navigate to **Privacy → Cookies → See all cookies**, find the app's domain, and delete all cookies for it. Alternatively, clear all cookies from the last hour.
+  2. **Try an incognito or private window.** This starts a completely fresh session with no cached cookies. If this resolves the loop, the issue is with stored cookie data in your main browser profile.
+  3. **Disable browser extensions.** Some privacy or security extensions interfere with session cookies. Try the app with all extensions disabled.
+  4. **Try a different browser.** If the loop only occurs in one browser, a corrupted browser profile may be the cause.
+  5. **Check for third-party cookie restrictions.** Some browsers block third-party cookies by default (Firefox, Safari). If the app uses a subdomain for authentication, you may need to allow cookies from the app's domain in your browser's privacy settings.
+</Accordion>
+
+## Still Need Help?
+
+<Card
+  title="Contact Support"
+  icon="headset"
+  href="/troubleshooting/contact-support"
+>
+  If none of the steps above resolved your issue, our support team is here to help. Visit the Contact Support page to find the fastest way to reach us based on your plan.
+</Card>

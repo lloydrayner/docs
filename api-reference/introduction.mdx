@@ -1,0 +1,104 @@
+---
+title: "REST API Reference: Build Integrations and Automate"
+sidebarTitle: "Introduction"
+description: "Explore the REST API for programmatic access to users, records, and webhooks. Build integrations, automate workflows, and extend the platform."
+---
+
+The app's REST API gives you programmatic access to every resource in your account — users, records, webhooks, and more. Whether you're building a custom integration, automating repetitive workflows, or embedding app data into another system, the API provides a consistent, predictable interface based on standard HTTP conventions.
+
+## Base URL
+
+All API requests are made over HTTPS. HTTP requests are rejected. Point your client at the following base URL:
+
+```
+https://api.example.com/v1
+```
+
+## API Versioning
+
+The current stable version of the API is **v1**. The version is included directly in the URL path, so you always know exactly which contract you're calling. When breaking changes are introduced, a new version (e.g. `/v2`) is published alongside the existing one, giving you time to migrate without disrupting live integrations.
+
+<Note>
+  Non-breaking additions — such as new optional fields or new event types — may be added to the current version at any time. Design your integration to ignore unknown fields so it remains forward-compatible.
+</Note>
+
+## Request Format
+
+Send all request bodies as JSON and include the `Content-Type: application/json` header on every request that carries a body (POST, PUT, PATCH). Query parameters are accepted on GET requests.
+
+<Note>
+  Replace `sk_live_abc123` in the examples throughout this reference with your own API key, which you can generate from **Settings → API Keys**. See [Authentication](/api-reference/authentication) for full details.
+</Note>
+
+```bash
+curl -X POST https://api.example.com/v1/data \
+  -H "Authorization: Bearer sk_live_abc123" \
+  -H "Content-Type: application/json" \
+  -d '{"title": "My New Record", "status": "active"}'
+```
+
+## Response Format
+
+Every response body is JSON. Successful responses wrap the returned resource (or array of resources) in a standard envelope, while error responses include a machine-readable error code and a human-readable message.
+
+**Successful response envelope**
+
+```json
+{
+  "success": true,
+  "data": { "..." : "..." },
+  "meta": {
+    "page": 1,
+    "per_page": 20,
+    "total": 142
+  }
+}
+```
+
+The `meta` object is present on all paginated list responses and tells you the current page, the number of results per page, and the total number of matching records.
+
+**Error response envelope**
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "RESOURCE_NOT_FOUND",
+    "message": "The requested resource could not be found."
+  }
+}
+```
+
+Use the `error.code` field to handle specific error conditions programmatically. The `error.message` field is suitable for logging or displaying to technical users.
+
+### HTTP Status Codes
+
+| Status | Meaning |
+|---|---|
+| `200 OK` | Request succeeded. |
+| `201 Created` | Resource was created successfully. |
+| `204 No Content` | Request succeeded; no body is returned (e.g. DELETE). |
+| `400 Bad Request` | The request body or parameters are invalid. |
+| `401 Unauthorized` | The API key is missing or invalid. |
+| `403 Forbidden` | The API key does not have permission for this action. |
+| `404 Not Found` | The requested resource does not exist. |
+| `422 Unprocessable Entity` | Validation failed on the submitted data. |
+| `429 Too Many Requests` | You've exceeded your plan's rate limit. |
+| `500 Internal Server Error` | Something went wrong on the server. |
+
+## Available Resources
+
+<CardGroup cols={2}>
+  <Card title="Users" icon="users" href="/api-reference/users">
+    List, retrieve, create, and update user accounts in your organisation.
+  </Card>
+  <Card title="Data" icon="database" href="/api-reference/data">
+    Full CRUD access to records, including filtering, bulk operations, and soft-delete.
+  </Card>
+  <Card title="Webhooks" icon="webhook" href="/api-reference/webhooks">
+    Register endpoints to receive real-time HTTP POST notifications for account events.
+  </Card>
+  <Card title="Authentication" icon="key" href="/api-reference/authentication">
+    Generate API keys, manage scopes, and learn how to authenticate every request.
+  </Card>
+</CardGroup>

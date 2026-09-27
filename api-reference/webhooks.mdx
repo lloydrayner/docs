@@ -1,0 +1,270 @@
+---
+title: "Webhooks API: Receive Real-Time Event Notifications"
+sidebarTitle: "Webhooks"
+description: "Configure webhook endpoints to receive HTTP POST notifications when events occur in your account — no polling required. Includes signature verification."
+---
+
+Webhooks let you build event-driven integrations without polling the API. When something happens in your account — a record is created, a user is invited, an automation fires — the app immediately sends an HTTP POST request to the URL you've registered, delivering a structured JSON payload that describes the event. You handle the payload on your server and react in real time.
+
+<Note>
+  The examples below use `sk_live_abc123` as a placeholder API key. Replace it with your own key from **Settings → API Keys**. See [Authentication](/api-reference/authentication) for details.
+</Note>
+
+## Supported Events
+
+Register a webhook to listen for any combination of the following events:
+
+| Event | Triggered when… |
+|---|---|
+| `data.created` | A new record is created in your account. |
+| `data.updated` | An existing record is updated. |
+| `data.deleted` | A record is moved to the trash. |
+| `user.invited` | A new user is invited to the account. |
+| `user.removed` | A user is removed from the account. |
+| `automation.triggered` | An automation rule fires and executes its actions. |
+
+## Webhook Payload
+
+Every event delivers a POST request with the following JSON body:
+
+```json
+{
+  "id": "evt_01HXYZ",
+  "event": "data.created",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "data": {
+    "id": "rec_01ABCD",
+    "title": "New Record",
+    "status": "active",
+    "created_at": "2024-01-15T10:30:00Z"
+  }
+}
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | string | A unique identifier for this event delivery, prefixed `evt_`. |
+| `event` | string | The event type, e.g. `data.created`. |
+| `timestamp` | string | ISO 8601 UTC timestamp of when the event occurred. |
+| `data` | object | The resource that triggered the event, in its post-event state. |
+
+---
+
+## List Webhooks
+
+Retrieve all webhook endpoints registered on your account.
+
+```
+GET /webhooks
+```
+
+### Example Request
+
+```bash
+curl -X GET https://api.example.com/v1/webhooks \
+  -H "Authorization: Bearer sk_live_abc123" \
+  -H "Content-Type: application/json"
+```
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "wh_01MNOP",
+      "url": "https://your-server.example.com/hooks/app",
+      "events": ["data.created", "data.updated"],
+      "created_at": "2024-03-01T12:00:00Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "per_page": 20,
+    "total": 1
+  }
+}
+```
+
+---
+
+## Create a Webhook
+
+Register a new webhook endpoint to start receiving event notifications.
+
+```
+POST /webhooks
+```
+
+### Body Parameters
+
+<ParamField body="url" type="string" required>
+  The publicly accessible HTTPS URL that the app will POST event payloads to. Localhost and private IP addresses are not accepted.
+</ParamField>
+
+<ParamField body="events" type="array" required>
+  An array of event type strings to subscribe to. To subscribe to all events, pass `["*"]`. See [Supported Events](#supported-events) for valid values.
+</ParamField>
+
+<ParamField body="secret" type="string">
+  An optional shared secret string used to sign webhook payloads. When provided, the app includes an `X-Webhook-Signature` header on every delivery so you can verify the payload's authenticity. See [Verifying Webhook Signatures](#verifying-webhook-signatures).
+</ParamField>
+
+### Example Request
+
+```bash
+curl -X POST https://api.example.com/v1/webhooks \
+  -H "Authorization: Bearer sk_live_abc123" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://your-server.example.com/hooks/app",
+    "events": ["data.created", "data.updated", "user.invited"],
+    "secret": "my_signing_secret_abc123"
+  }'
+```
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "wh_01MNOP",
+    "url": "https://your-server.example.com/hooks/app",
+    "events": ["data.created", "data.updated", "user.invited"],
+    "created_at": "2024-06-01T09:00:00Z"
+  }
+}
+```
+
+---
+
+## Delete a Webhook
+
+Remove a webhook endpoint. Deliveries in flight are not cancelled, but no new deliveries are dispatched after deletion.
+
+```
+DELETE /webhooks/{id}
+```
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique ID of the webhook to delete. Example: `wh_01MNOP`.
+</ParamField>
+
+### Example Request
+
+```bash
+curl -X DELETE https://api.example.com/v1/webhooks/wh_01MNOP \
+  -H "Authorization: Bearer sk_live_abc123"
+```
+
+A successful deletion returns `204 No Content` with no response body.
+
+---
+
+## Verifying Webhook Signatures
+
+When you create a webhook with a `secret`, the app signs every payload using **HMAC-SHA256** and includes the signature in the `X-Webhook-Signature` header. Always verify this signature before processing the event — it confirms that the request genuinely came from the app and that the payload was not tampered with in transit.
+
+The signature is computed as:
+
+```
+HMAC-SHA256(secret, raw_request_body)
+```
+
+The header value is formatted as `sha256=<hex_digest>`.
+
+<Tabs>
+  <Tab title="Node.js">
+    ```js
+    const crypto = require("crypto");
+
+    function verifyWebhookSignature(rawBody, signature, secret) {
+      const expectedSignature =
+        "sha256=" +
+        crypto
+          .createHmac("sha256", secret)
+          .update(rawBody)
+          .digest("hex");
+
+      // Use timingSafeEqual to prevent timing attacks
+      const sigBuffer = Buffer.from(signature);
+      const expectedBuffer = Buffer.from(expectedSignature);
+
+      if (sigBuffer.length !== expectedBuffer.length) return false;
+
+      return crypto.timingSafeEqual(sigBuffer, expectedBuffer);
+    }
+
+    // Express example
+    app.post("/hooks/app", express.raw({ type: "application/json" }), (req, res) => {
+      const signature = req.headers["x-webhook-signature"];
+      const isValid = verifyWebhookSignature(req.body, signature, process.env.WEBHOOK_SECRET);
+
+      if (!isValid) {
+        return res.status(401).send("Invalid signature");
+      }
+
+      const event = JSON.parse(req.body);
+      // Process event...
+      res.status(200).send("OK");
+    });
+    ```
+  </Tab>
+  <Tab title="Python">
+    ```python
+    import hashlib
+    import hmac
+    import os
+    from flask import Flask, request, abort
+
+    app = Flask(__name__)
+
+    def verify_webhook_signature(raw_body: bytes, signature: str, secret: str) -> bool:
+        expected = "sha256=" + hmac.new(
+            secret.encode("utf-8"),
+            raw_body,
+            hashlib.sha256
+        ).hexdigest()
+        return hmac.compare_digest(expected, signature)
+
+    @app.route("/hooks/app", methods=["POST"])
+    def handle_webhook():
+        raw_body = request.get_data()
+        signature = request.headers.get("X-Webhook-Signature", "")
+        secret = os.environ["WEBHOOK_SECRET"]
+
+        if not verify_webhook_signature(raw_body, signature, secret):
+            abort(401, "Invalid signature")
+
+        event = request.get_json(force=True)
+        # Process event...
+        return "OK", 200
+    ```
+  </Tab>
+</Tabs>
+
+<Tip>
+  Always read the raw request body before parsing it as JSON. Parsing first and re-serializing produces a different byte sequence and will cause signature verification to fail.
+</Tip>
+
+---
+
+## Retry Policy
+
+If your endpoint returns any status code other than a `2xx`, or does not respond within **10 seconds**, the app treats the delivery as failed and retries it automatically.
+
+| Attempt | Delay after previous failure |
+|---|---|
+| 1st retry | ~1 minute |
+| 2nd retry | ~5 minutes |
+| 3rd retry | ~30 minutes |
+
+After all retries are exhausted, the delivery is marked as permanently failed and is not retried again. You can view delivery history and manually replay failed events from **Settings → Webhooks**.
+
+<Warning>
+  Respond with a `200 OK` as quickly as possible — within 10 seconds. If your processing logic takes longer (e.g. you're querying a database or calling a third-party API), acknowledge the webhook immediately by returning `200`, then handle the payload asynchronously in a background job or queue. A slow response triggers the retry mechanism and can result in duplicate deliveries.
+</Warning>

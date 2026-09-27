@@ -1,0 +1,110 @@
+---
+title: "Import and Export Your Data: CSV, Excel, and JSON Guide"
+sidebarTitle: "Import & Export"
+description: "Step-by-step guide to importing records from CSV, Excel, or JSON files and exporting your data for reporting, backups, or migrations."
+---
+
+The app gives you full control over your data — bring it in from spreadsheets or other tools, and take it out whenever you need it for reporting, backups, or migrations. Whether you're onboarding a large dataset for the first time or pulling records into a quarterly report, the import and export tools are designed to handle it with minimal friction.
+
+<Tabs>
+  <Tab title="Import">
+    ## Supported Import Formats
+
+    | Format | Extension | Notes |
+    |--------|-----------|-------|
+    | Comma-separated values | `.csv` | Recommended for most imports |
+    | Microsoft Excel | `.xlsx` | First sheet is imported by default |
+    | JSON | `.json` | Array of flat objects |
+
+    ## How to Import Data
+
+    <Steps>
+      <Step title="Open Import Settings">
+        Navigate to **Settings → Import**. You need Admin or Owner permissions to access this page.
+      </Step>
+      <Step title="Upload Your File">
+        Click **Upload File** and select your `.csv`, `.xlsx`, or `.json` file. The app accepts files up to 25 MB. If your file is larger, split it into multiple batches of up to 50,000 rows each.
+      </Step>
+      <Step title="Map Your Fields">
+        The app automatically tries to match your file's column headers to existing fields in your account. Review each mapping and correct any mismatches. Use the **Add New Field** option to create fields on the fly for columns the app doesn't recognize.
+      </Step>
+      <Step title="Preview the Import">
+        A preview table shows the first 10 rows as they will appear after import. Verify that data types are correct — dates parse as dates, numbers as numbers, and so on. If anything looks wrong, go back and adjust the field mapping.
+      </Step>
+      <Step title="Confirm and Import">
+        Click **Start Import**. The app processes your file in the background. You'll receive an in-app notification (and optionally an email) when the import completes, along with a summary of rows imported and any rows skipped due to errors.
+      </Step>
+    </Steps>
+
+    <Warning>
+      **Duplicate handling:** By default, the importer creates a new record for every row in your file. If your data contains records that already exist in your account, you may end up with duplicates. To prevent this, enable **Match on unique field** during the mapping step and select a field (such as an ID or email address) that the app can use to identify existing records and update them instead of creating new ones.
+    </Warning>
+
+    ## Download a Sample Template
+
+    If you're preparing a new import from scratch, download the sample CSV template from the Import page. The template includes all available field headers and example values formatted exactly as the importer expects them, which removes most mapping errors before they happen.
+  </Tab>
+
+  <Tab title="Export">
+    ## Supported Export Formats
+
+    | Format | Extension | Best for |
+    |--------|-----------|----------|
+    | Comma-separated values | `.csv` | Data analysis, re-importing elsewhere |
+    | Microsoft Excel | `.xlsx` | Formatted spreadsheet reports |
+    | JSON | `.json` | Developer handoffs, API integrations |
+    | PDF | `.pdf` | Shareable, print-ready reports |
+
+    ## How to Export Data
+
+    <Steps>
+      <Step title="Select Your Records">
+        To export specific records, check the boxes next to the rows you want. To export everything in the current view, skip this step — the exporter will include all visible records automatically.
+      </Step>
+      <Step title="Click Export">
+        Click the **Export** button in the toolbar (or go to **Settings → Export** for account-wide exports). If you selected specific records, the exporter will default to exporting your selection.
+      </Step>
+      <Step title="Choose Your Format">
+        Select your preferred format from the dropdown: CSV, XLSX, JSON, or PDF. For PDF exports, you can also choose a layout — list view or a card-per-page format.
+      </Step>
+      <Step title="Download Your File">
+        Click **Generate Export**. Small exports (under 5,000 rows) download directly in your browser. Larger exports are processed in the background and delivered to your email as a download link within a few minutes.
+      </Step>
+    </Steps>
+
+    <Note>
+      **Large exports are sent by email.** If your export contains more than 5,000 rows, the app queues it as a background job. You'll receive an email with a secure download link once it's ready. The link expires after 48 hours, so download your file promptly.
+    </Note>
+  </Tab>
+</Tabs>
+
+---
+
+## Migrating from Other Tools
+
+If you're moving to the app from another platform, the fastest path is usually a CSV export from your current tool followed by an import here. Nearly every SaaS product and spreadsheet application can produce a CSV file — check your current tool's settings or help documentation for an "Export" or "Download data" option.
+
+Once you have your CSV, clean it up before importing: remove duplicate rows, standardize date formats (`YYYY-MM-DD` is safest), and ensure column headers are descriptive. Then follow the import steps above, and use the field-mapping step to align your old column names with the app's fields.
+
+---
+
+## Frequently Asked Questions
+
+<Accordion title="My import failed — what went wrong?">
+  The most common causes of a failed import are:
+
+  - **Malformed CSV:** Open your file in a plain text editor and check for unmatched quotes, inconsistent delimiters, or stray line breaks inside fields. Most spreadsheet apps let you re-save as CSV to fix formatting issues.
+  - **Incorrect date formats:** The importer expects dates in `YYYY-MM-DD`, `MM/DD/YYYY`, or `DD/MM/YYYY` format. Mixed formats in the same column will cause parsing errors.
+  - **File encoding:** Save your CSV as UTF-8. Files saved in other encodings (such as Windows-1252) may cause special characters to appear as garbled text or fail entirely.
+  - **Exceeding the row limit:** A single import can contain up to 50,000 rows. Split larger files into multiple batches.
+
+  After a failed import, check the error report linked in the failure notification — it lists every row that was skipped and the reason why.
+</Accordion>
+
+<Accordion title="How do I export a filtered view?">
+  Apply your filters in the main view before clicking **Export**. The exporter respects whatever filters, sorts, and column visibility settings are active at the time you initiate the export — only the records matching your current view are included in the file. If you want to save that filter for repeated use, save it as a named view first so you can return to it without reconfiguring the filters each time.
+</Accordion>
+
+<Accordion title="Is there a row limit for imports?">
+  Yes — each individual import is limited to **50,000 rows**. If your dataset is larger, split it into multiple files and import them sequentially. There is no limit on the total number of records in your account (subject to your plan's storage quota), so you can run as many imports as needed to bring in your full dataset.
+</Accordion>

@@ -1,0 +1,80 @@
+---
+title: "API Authentication: Generate and Use Your API Keys"
+sidebarTitle: "Authentication"
+description: "Generate and manage API keys from your account settings, then pass them as Bearer tokens to authenticate all API requests securely."
+---
+
+The app uses API keys to authenticate requests to the REST API. Every request must include a valid API key in the `Authorization` header as a Bearer token. Keys are tied to your account and inherit the permissions you assign when you create them — so a read-only key cannot modify resources, even if it reaches the right endpoint.
+
+## Generating an API Key
+
+<Steps>
+  <Step title="Log in to your account">
+    Open the app and sign in with your credentials. You must have Owner or Admin permissions to manage API keys.
+  </Step>
+  <Step title="Open Settings → API Keys">
+    Click your avatar in the top-right corner, select **Settings**, then choose **API Keys** from the left-hand navigation.
+  </Step>
+  <Step title="Click Generate New Key">
+    Select **Generate New Key** in the top-right of the API Keys page. A dialog will open asking for a name and scope.
+  </Step>
+  <Step title="Name your key">
+    Give the key a clear, descriptive name that identifies where it will be used — for example, `Production App` or `CI Pipeline`. This makes it easier to audit and rotate keys later.
+  </Step>
+  <Step title="Copy and store your key securely">
+    After creation, your full API key is displayed exactly once. Copy it immediately and store it in a secrets manager or environment variable. Once you close the dialog, the full key is no longer retrievable from the app.
+  </Step>
+</Steps>
+
+## Making Authenticated Requests
+
+Pass your API key in the `Authorization` header on every request, using the `Bearer` scheme. All requests must be made over HTTPS — plain HTTP connections are rejected.
+
+<Note>
+  The examples below use `sk_live_abc123` as a placeholder API key. Replace it with your own key copied from **Settings → API Keys**.
+</Note>
+
+```bash
+curl -X GET https://api.example.com/v1/users \
+  -H "Authorization: Bearer sk_live_abc123" \
+  -H "Content-Type: application/json"
+```
+
+## Authentication Errors
+
+| HTTP Status | Error Code | Meaning |
+|---|---|---|
+| `401 Unauthorized` | `INVALID_API_KEY` | The key is missing, malformed, or has been revoked. |
+| `403 Forbidden` | `INSUFFICIENT_SCOPE` | The key is valid but does not have permission for this resource or action. |
+
+If you receive a `401`, check that the header is formatted correctly (`Bearer ` followed by the key, with no extra whitespace) and that the key hasn't been revoked. If you receive a `403`, review the key's assigned scope — see [Key Scopes](#key-scopes) below.
+
+## Key Scopes
+
+When you create a key, you choose one of two scopes:
+
+- **Read-only** — the key may call all `GET` endpoints. It cannot create, update, or delete any resource. Use this scope for dashboards, reporting tools, and any integration that only needs to read data.
+- **Read-write** — the key may call all endpoints, including `POST`, `PUT`, and `DELETE`. Use this scope only for integrations that genuinely need to modify data, and treat it with the same care as a password.
+
+<Tip>
+  Apply the principle of least privilege. Create a read-only key for integrations that only consume data, and a separate read-write key for integrations that write back to the app. That way, a compromised read-only key cannot alter your data.
+</Tip>
+
+## Rotating Keys
+
+Rotate API keys regularly — or immediately if you suspect one has been exposed. To rotate a key without downtime:
+
+1. Generate a new API key with the same scope as the key you're replacing.
+2. Update your integration or environment to use the new key.
+3. Verify your integration is working correctly with the new key.
+4. Revoke the old key from **Settings → API Keys**.
+
+There is no automatic rotation — you control the timing entirely, which means you can complete the swap before invalidating the old key.
+
+## Revoking Keys
+
+To revoke a key, go to **Settings → API Keys**, find the key in the list, and click **Revoke**. Revocation takes effect immediately — any request using the revoked key will receive a `401 Unauthorized` response. There is no undo, so confirm that no active integration still depends on the key before revoking it.
+
+<Warning>
+  Never commit API keys to source control. Even in private repositories, hardcoded keys are a significant security risk. Store keys in environment variables or a secrets manager (such as AWS Secrets Manager, HashiCorp Vault, or your CI platform's built-in secrets store) and reference them at runtime.
+</Warning>

@@ -1,0 +1,121 @@
+---
+title: "Troubleshoot Common Issues and App Errors Step by Step"
+sidebarTitle: "Common Issues"
+description: "Step-by-step solutions for the most frequently reported problems — loading errors, blank screens, sync issues, missing data, and notification problems."
+---
+
+This page is your first stop when something isn't working as expected. The sections below cover the most common issues users report, organised by category, with step-by-step solutions you can try right now without contacting support.
+
+## Loading & Performance
+
+<Accordion title="The app is loading slowly">
+  Slow load times are usually caused by a stale cache, a weak network connection, or browser extensions interfering with the app. Work through these steps in order until performance improves.
+
+  1. **Clear your browser cache.** In most browsers, press `Ctrl + Shift + Delete` (Windows/Linux) or `Cmd + Shift + Delete` (Mac), select "Cached images and files", and clear the data. Reload the app.
+  2. **Check your internet connection.** Run a quick speed test at [fast.com](https://fast.com). If your connection is slow or unstable, try switching to a wired connection or a different Wi-Fi network.
+  3. **Open the app in an incognito or private window.** This disables browser extensions that can slow down page rendering. If the app loads faster in incognito, disable your extensions one at a time to identify the culprit.
+  4. **Try a different browser.** If the issue persists, test in a second browser (Chrome, Firefox, Edge, or Safari) to rule out browser-specific problems.
+  5. **Check the status page.** Ongoing infrastructure issues can affect performance. Visit your product's status page (linked in the app footer) to see if there is a known incident.
+</Accordion>
+
+<Accordion title="Pages aren't loading / blank screen">
+  A blank screen or a page that never finishes loading is often caused by cached data that has become out of sync with the current version of the app.
+
+  1. **Perform a hard refresh.** Press `Ctrl + Shift + R` (Windows/Linux) or `Cmd + Shift + R` (Mac) to force the browser to reload all assets from the server, bypassing the cache.
+  2. **Clear your cookies for the app.** Go to your browser's settings, find the option to clear cookies for a specific site, and remove cookies for the app's domain. Then sign back in.
+  3. **Disable browser extensions.** Ad blockers, script blockers, and privacy extensions can prevent pages from rendering. Open the app in an incognito window to test without extensions.
+  4. **Check the status page.** If nothing loads across the whole app, visit the status page (linked in the app footer) to check for an active outage.
+  5. **Try a different device.** If the blank screen appears on multiple browsers on the same device, the issue may be device-specific. Test on another computer or your mobile device.
+</Accordion>
+
+<Accordion title="The app is down">
+  If you can't reach the app at all, the first thing to check is whether there is a known outage.
+
+  1. **Visit the status page** linked in the app footer. Active incidents, scheduled maintenance windows, and historical uptime data are all published there in real time.
+  2. **Subscribe to status updates.** On the status page, click **Subscribe** to receive email or SMS notifications whenever an incident is opened or resolved.
+  3. **Check your network.** Confirm you can reach other websites. If other sites also fail, the issue is with your local network or ISP, not the app.
+  4. **Wait and retry.** If an incident is in progress, our engineering team is already working on it. Avoid repeated login attempts during an outage, as this can trigger temporary account lockouts.
+
+  <Note>
+    Planned maintenance windows are announced at least 48 hours in advance on the status page and via email to account administrators.
+  </Note>
+</Accordion>
+
+## Data & Sync
+
+<Accordion title="My data isn't syncing">
+  When data appears out of date or changes you've made on one device aren't reflected elsewhere, try these steps to force a fresh sync.
+
+  1. **Force a manual refresh.** Press `F5` or `Ctrl + R` (Windows/Linux) / `Cmd + R` (Mac) to reload the current page and pull the latest data from the server.
+  2. **Check your integration settings.** If the data comes from a connected third-party tool, go to **Settings → Integrations** and confirm the connection is active. A status badge will show "Connected" or "Error". If you see an error, disconnect and reconnect the integration.
+  3. **Sign out and back in.** Go to your account menu and select **Sign out**. Sign back in with your credentials. This refreshes your session token and can resolve sync issues caused by an expired session.
+  4. **Check your plan limits.** Some plans have limits on sync frequency. Review your plan details under **Settings → Billing** to confirm your tier supports the sync frequency you expect.
+  5. **Check the status page.** Data sync issues can be caused by a partial outage. Visit the status page (linked in the app footer) to check for active incidents affecting data services.
+</Accordion>
+
+<Accordion title="Records are missing">
+  Before assuming data has been lost, check the following locations — records are often hidden by an active filter, moved to the archive, or sitting in the trash.
+
+  1. **Check your active filters.** Look for any filter chips or filter indicators at the top of your list or table view. Click **Clear filters** or **Reset** to remove all active filters and see the full dataset.
+  2. **Check the archive.** Some record types can be archived rather than deleted. Navigate to the relevant section and look for an **Archived** or **Show archived** toggle.
+  3. **Check the trash.** Go to **Settings → Trash** (or look for a **Trash** link in the sidebar). Deleted items are held here before permanent removal.
+  4. **Verify your view settings.** If you are using a saved view, it may be configured to show only certain record types or date ranges. Switch to the default **All items** view to see everything.
+  5. **Check your permissions.** If you are a member of a team workspace, records may have been moved to a space you don't have access to. Contact your workspace admin to verify.
+</Accordion>
+
+<Accordion title="I accidentally deleted data">
+  Data you delete is not immediately and permanently removed. You have a **30-day recovery window** during which deleted items can be restored.
+
+  **To recover deleted data:**
+
+  1. Go to **Settings → Trash**.
+  2. Browse or search for the item you want to recover.
+  3. Select the item and click **Restore**. The item is returned to its original location.
+
+  **If the item isn't in the Trash:**
+
+  - The item may have been permanently deleted by a workspace admin using the **Empty Trash** action. In this case, contact support — we may be able to assist with recovery from a backup, depending on when the deletion occurred.
+  - Contact support within **72 hours** of permanent deletion for the best chance of recovery.
+
+  <Warning>
+    Items removed from the Trash using **Empty Trash** or that have exceeded the 30-day retention window cannot be recovered through self-service. Contact support as soon as possible if you need assistance.
+  </Warning>
+</Accordion>
+
+## Notifications
+
+<Accordion title="I'm not receiving email notifications">
+  If expected notification emails aren't arriving, work through these checks before assuming notifications are broken.
+
+  1. **Check your spam or junk folder.** Email providers sometimes incorrectly classify notification emails as spam. Mark any misclassified emails as "Not spam" to improve future delivery.
+  2. **Add the sender to your contacts.** Add the app's notification email address (shown in the footer of any notification email) to your contacts or safe-sender list to prevent future emails from being filtered.
+  3. **Check your notification preferences.** Go to **Settings → Notifications** and confirm that the notification types you expect are enabled. Each notification category can be toggled on or off independently.
+  4. **Verify your email address.** Go to **Settings → Account** and confirm your email address is correct and verified. If it shows "Unverified", click **Resend verification email** and complete the verification.
+  5. **Check your organisation's email filters.** If you use a work email address, your company's email security gateway may be blocking messages from our domain. Contact your IT team and ask them to whitelist our sending domain (visible in any notification email header).
+</Accordion>
+
+<Accordion title="I'm getting too many notifications">
+  You have full control over which events trigger notifications and how those notifications are delivered. Here's how to reduce the volume.
+
+  **Reduce notification frequency:**
+
+  1. Go to **Settings → Notifications**.
+  2. Review each notification category (Comments, Mentions, Updates, Reminders, etc.).
+  3. Toggle off any categories you don't need, or change the delivery method from **Email** to **In-app only** to keep notifications visible without filling your inbox.
+
+  **Use digest mode:**
+
+  - Switch from **Instant** to **Daily digest** or **Weekly digest** for lower-priority notification types. The digest bundles multiple notifications into a single email sent at a scheduled time.
+
+  **Mute specific items:**
+
+  - On any record, page, or project, open the **…** menu and select **Mute notifications** to stop receiving updates for that specific item without changing your global settings.
+
+  **Unsubscribe from marketing emails:**
+
+  - Scroll to the bottom of any marketing or product update email and click **Unsubscribe**. This does not affect transactional or account security notifications.
+</Accordion>
+
+<Tip>
+  If your issue isn't listed here, our support team is ready to help. Visit the [Contact Support](/troubleshooting/contact-support) page to get in touch — please include your account email and a brief description of what you were doing when the issue occurred.
+</Tip>

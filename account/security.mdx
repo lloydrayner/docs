@@ -1,0 +1,118 @@
+---
+title: "Secure Your Account: 2FA, Sessions, and Access Controls"
+sidebarTitle: "Security"
+description: "Enable two-factor authentication, manage active sessions, review login history, and configure security settings to protect your account."
+---
+
+Your account security is your first line of defence against unauthorised access. The app provides several layers of protection — two-factor authentication, session management, login history, and API key controls — so you can detect and respond to suspicious activity quickly. We strongly recommend enabling all available security features, especially if your account contains sensitive team data.
+
+## Enabling Two-Factor Authentication (2FA)
+
+Two-factor authentication adds a second verification step at login, making your account significantly harder to compromise even if your password is exposed. The app supports any TOTP-compatible authenticator app, including **Google Authenticator** and **Authy**.
+
+<Warning>
+  Before completing 2FA setup, the app will display a set of **one-time recovery codes**. Save these codes somewhere safe — such as a password manager or printed in a secure location. If you lose access to your authenticator device, recovery codes are the **only way** to regain entry to your account without contacting support. Each code can only be used once.
+</Warning>
+
+<Steps>
+  <Step title="Open Security Settings">
+    Click your avatar in the top-right corner of the app and go to **Settings → Security**. Under the **Two-Factor Authentication** section, click **Enable 2FA**.
+  </Step>
+  <Step title="Install an Authenticator App">
+    If you haven't already, download an authenticator app on your mobile device. Both **Google Authenticator** ([iOS](https://apps.apple.com/app/google-authenticator/id388497605) / [Android](https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2)) and **Authy** ([iOS](https://apps.apple.com/app/authy/id494168017) / [Android](https://play.google.com/store/apps/details?id=com.authy.authy)) are free and widely supported.
+  </Step>
+  <Step title="Scan the QR Code">
+    The app displays a QR code on screen. Open your authenticator app, tap **Add Account** (or the **+** icon), and choose **Scan QR Code**. Point your camera at the QR code. The app is added to your authenticator immediately.
+
+    If you can't scan the QR code, click **Enter code manually** to copy the setup key and paste it into your authenticator app instead.
+  </Step>
+  <Step title="Enter the Verification Code">
+    Your authenticator app will display a 6-digit code that refreshes every 30 seconds. Type the current code into the **Verification Code** field in the app and click **Verify**.
+  </Step>
+  <Step title="Save Your Recovery Codes">
+    The app displays your one-time recovery codes. Click **Download Codes** or **Copy Codes** and store them securely before clicking **Done**. You will not be shown these codes again — you can regenerate them later from **Settings → Security**, but doing so invalidates the previous set.
+  </Step>
+</Steps>
+
+Once 2FA is enabled, you'll be prompted for a verification code every time you sign in from a new device or browser.
+
+## Active Sessions
+
+The **Active Sessions** panel in **Settings → Security** shows every device and browser currently signed in to your account, including the approximate location, device type, and time of last activity.
+
+To revoke access for a specific session:
+
+1. Find the session you want to end in the list.
+2. Click **Revoke** next to that session.
+3. Confirm in the dialog. That device is signed out immediately.
+
+To sign out of all devices at once — for example, if you suspect your account has been compromised — click **Revoke All Sessions**. This ends every active session including your current one, and you'll need to log back in.
+
+## Login History
+
+The **Login History** tab shows a chronological log of recent sign-in attempts to your account, including the timestamp, IP address, device, and whether the attempt succeeded or was blocked.
+
+Review this log regularly to catch any access you don't recognise. If you see a login from an unfamiliar location or device:
+
+1. Click **Flag as Suspicious** next to the entry to alert our security team.
+2. Immediately change your password in **Settings → Profile → Password**.
+3. Revoke all active sessions (see above).
+4. Confirm your recovery codes are still intact.
+
+<Note>
+  Login history is retained for **90 days** on Pro and Enterprise plans and for **30 days** on Free and Starter plans. If you need longer retention for compliance purposes, consider upgrading to an Enterprise plan with custom audit log retention.
+</Note>
+
+## API Keys
+
+API keys allow external applications and scripts to access your account programmatically. Treat API keys like passwords — anyone who holds a key has the access level you granted it.
+
+To manage your API keys, go to **Settings → Security → API Keys**. From there you can:
+
+- **Create a new key** — give it a descriptive name and select its permission scope (read-only or full access).
+- **Copy a key** — keys are shown in full only at creation time. Copy and store them securely immediately.
+- **Revoke a key** — click **Revoke** next to any key to invalidate it instantly.
+
+For full details on authenticating API requests and available permission scopes, see the [API Authentication reference](/api-reference/authentication).
+
+## SSO Configuration
+
+Enterprise plan accounts can configure **SAML 2.0 single sign-on (SSO)** to authenticate team members through your organisation's identity provider (IdP), such as Okta, Azure AD, or Google Workspace.
+
+When SSO is enabled:
+
+- Members sign in via your IdP instead of a password.
+- You can enforce SSO so that password-based login is disabled for all members.
+- User provisioning and deprovisioning can be automated via SCIM.
+
+To set up SSO, go to **Settings → Security → SSO Configuration** and follow the guided setup wizard. You'll need your IdP's metadata XML or the entity ID and SSO URL. For step-by-step IdP-specific instructions or help with SCIM provisioning, contact your dedicated Customer Success Manager or [reach out to Enterprise support](mailto:enterprise@example.com).
+
+<Note>
+  SSO configuration is only available on **Enterprise** plans. If you're on a lower-tier plan and need SSO, [contact sales](mailto:sales@example.com) to discuss an upgrade.
+</Note>
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="I lost access to my 2FA device — how do I get back in?">
+    If you can no longer generate codes from your authenticator app, use one of your **recovery codes** to sign in:
+
+    1. On the login screen, enter your email and password as normal.
+    2. When prompted for your 2FA code, click **Use a recovery code instead**.
+    3. Enter one of your saved recovery codes. Each code is single-use and will be marked as used once entered.
+    4. Once signed in, go to **Settings → Security** to disable your old 2FA setup and re-enrol with your new device.
+
+    If you have also lost your recovery codes, contact [support](mailto:support@example.com) from the email address associated with your account. Our team will verify your identity through an alternative process and help you regain access. For security reasons, this process may take up to one business day.
+  </Accordion>
+  <Accordion title="How do I log out of all devices at once?">
+    To immediately end all active sessions across every device and browser:
+
+    1. Go to **Settings → Security → Active Sessions**.
+    2. Scroll to the bottom of the sessions list and click **Revoke All Sessions**.
+    3. Confirm the action in the dialog that appears.
+
+    All sessions — including your current one — are terminated instantly. You'll be redirected to the login page and will need to sign in again. If you have 2FA enabled, you'll be prompted for your authenticator code on your next login as usual.
+
+    We recommend doing this any time you suspect unauthorised access, after using a shared or public computer, or when offboarding from an organisation.
+  </Accordion>
+</AccordionGroup>

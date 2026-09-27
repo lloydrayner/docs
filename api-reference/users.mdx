@@ -1,0 +1,267 @@
+---
+title: "Users API: Manage Your Account Users Programmatically"
+sidebarTitle: "Users"
+description: "REST endpoints to list, retrieve, create, update, and delete user accounts in your organisation. Requires a read or read-write scoped API key."
+---
+
+The Users API lets you manage every member of your account programmatically — list who has access, look up individuals by ID, invite new members, update roles, and remove users who no longer need access. Read operations require a read-scoped key; creating, updating, and deleting users requires a read-write key.
+
+<Note>
+  The examples below use `sk_live_abc123` as a placeholder API key. Replace it with your own key from **Settings → API Keys**. See [Authentication](/api-reference/authentication) for details.
+</Note>
+
+---
+
+## List Users
+
+Retrieve a paginated list of all users in your account.
+
+```
+GET /users
+```
+
+### Query Parameters
+
+<ParamField query="page" type="integer" default="1">
+  The page number to return. Starts at `1`.
+</ParamField>
+
+<ParamField query="per_page" type="integer" default="20">
+  Number of results per page. Maximum `100`.
+</ParamField>
+
+<ParamField query="role" type="string">
+  Filter results to users with a specific role. Accepted values: `owner`, `admin`, `member`, `viewer`.
+</ParamField>
+
+### Response Fields
+
+<ResponseField name="id" type="string">
+  Unique identifier for the user, prefixed `usr_`.
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  The user's email address.
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  The user's display name.
+</ResponseField>
+
+<ResponseField name="role" type="string">
+  The user's role within the account: `owner`, `admin`, `member`, or `viewer`.
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  ISO 8601 timestamp of when the user was added to the account.
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  ISO 8601 timestamp of the most recent update to the user record.
+</ResponseField>
+
+### Example Request
+
+```bash
+curl -X GET "https://api.example.com/v1/users?page=1&per_page=20&role=admin" \
+  -H "Authorization: Bearer sk_live_abc123" \
+  -H "Content-Type: application/json"
+```
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "usr_01HXYZ",
+      "email": "alice@example.com",
+      "name": "Alice Nguyen",
+      "role": "admin",
+      "created_at": "2024-01-10T08:00:00Z",
+      "updated_at": "2024-03-05T14:22:00Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "per_page": 20,
+    "total": 3
+  }
+}
+```
+
+---
+
+## Get a User
+
+Retrieve a single user by their ID.
+
+```
+GET /users/{id}
+```
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique ID of the user to retrieve. Example: `usr_01HXYZ`.
+</ParamField>
+
+### Example Request
+
+```bash
+curl -X GET https://api.example.com/v1/users/usr_01HXYZ \
+  -H "Authorization: Bearer sk_live_abc123" \
+  -H "Content-Type: application/json"
+```
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "usr_01HXYZ",
+    "email": "alice@example.com",
+    "name": "Alice Nguyen",
+    "role": "admin",
+    "created_at": "2024-01-10T08:00:00Z",
+    "updated_at": "2024-03-05T14:22:00Z"
+  }
+}
+```
+
+---
+
+## Create (Invite) a User
+
+Invite a new user to your account. The invited user receives an email prompting them to accept the invitation and set a password if they don't already have an account.
+
+```
+POST /users
+```
+
+### Body Parameters
+
+<ParamField body="email" type="string" required>
+  The email address to send the invitation to. Must be a valid email format and not already a member of the account.
+</ParamField>
+
+<ParamField body="name" type="string" required>
+  The display name for the new user.
+</ParamField>
+
+<ParamField body="role" type="string" required>
+  The role to assign to the new user. Accepted values: `admin`, `member`, `viewer`. You cannot assign the `owner` role via the API.
+</ParamField>
+
+### Example Request
+
+```bash
+curl -X POST https://api.example.com/v1/users \
+  -H "Authorization: Bearer sk_live_abc123" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "bob@example.com",
+    "name": "Bob Chen",
+    "role": "member"
+  }'
+```
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "usr_02ABCD",
+    "email": "bob@example.com",
+    "name": "Bob Chen",
+    "role": "member",
+    "created_at": "2024-06-01T09:15:00Z",
+    "updated_at": "2024-06-01T09:15:00Z"
+  }
+}
+```
+
+---
+
+## Update a User
+
+Update the name or role of an existing user. Only fields you include in the request body are changed.
+
+```
+PUT /users/{id}
+```
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique ID of the user to update.
+</ParamField>
+
+### Body Parameters
+
+<ParamField body="name" type="string">
+  A new display name for the user.
+</ParamField>
+
+<ParamField body="role" type="string">
+  A new role for the user. Accepted values: `admin`, `member`, `viewer`.
+</ParamField>
+
+### Example Request
+
+```bash
+curl -X PUT https://api.example.com/v1/users/usr_02ABCD \
+  -H "Authorization: Bearer sk_live_abc123" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "role": "admin"
+  }'
+```
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "usr_02ABCD",
+    "email": "bob@example.com",
+    "name": "Bob Chen",
+    "role": "admin",
+    "created_at": "2024-06-01T09:15:00Z",
+    "updated_at": "2024-06-15T11:42:00Z"
+  }
+}
+```
+
+---
+
+## Delete a User
+
+Remove a user from your account immediately. The user loses access to the app as soon as the request completes.
+
+```
+DELETE /users/{id}
+```
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique ID of the user to remove.
+</ParamField>
+
+### Example Request
+
+```bash
+curl -X DELETE https://api.example.com/v1/users/usr_02ABCD \
+  -H "Authorization: Bearer sk_live_abc123"
+```
+
+A successful deletion returns `204 No Content` with no response body.
+
+<Warning>
+  Deleting a user is irreversible. The user is immediately removed from the account and loses all access. Any records owned by the deleted user remain in your account but will be unassigned. If you need to preserve the user's access for a limited time, consider downgrading their role to `viewer` instead of deleting them outright.
+</Warning>
